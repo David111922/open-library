@@ -18,6 +18,11 @@ const Login = () => {
   const handleSearchBooks = () => {
     navigate('/searchBooks'); // Update this path as necessary for your route
   };
+  // ! to handle sign up
+  const handleSignUp = () => {
+navigate('./SignUp');
+
+  }
 
   return (
     <div
@@ -81,6 +86,12 @@ const Login = () => {
             Login
           </button>
         </form>
+        
+        {/* Sign Up Button - Added Below Login */}
+        <p>Don't have an account?</p>
+        <button onClick={handleSignUp} style={{ padding: '10px 20px', cursor: 'pointer' }}>
+          Sign Up
+        </button>
       </div>
     </div>
   );
