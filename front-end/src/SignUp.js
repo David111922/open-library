@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom"; // For navigation
-
+import {faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 const USER_REGEX = /^[a-zA-Z0-9]+$/;
 const PWD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
@@ -16,7 +17,7 @@ const SignUp = () => {
   const [validPwd, setValidPwd] = useState(false);
   const [pwdFocus, setPwdFocus] = useState(false);
 
-  const [match, setMatchPwd] = useState("");
+  const [matchPwd, setMatchPwd] = useState("");
   const [validMatch, setValidMatch] = useState(false);
   const [matchFocus, setMatchFocus] = useState(false);
 
@@ -28,6 +29,27 @@ const SignUp = () => {
       userRef.current.focus();
     }
   }, []);
+// !useEffect to test REGEX function for user
+  useEffect(() => {
+const result = USER_REGEX.test(user);
+console.log(result);
+console.log(user)
+setValidName(result)
+  }, [user])
+// !useEffect to test REGEX function for password
+  useEffect(() => {
+const result = PWD_REGEX.test(pwd);
+console.log(result);
+console.log(pwd);
+setValidPwd(result);
+const match = pwd === matchPwd;
+setValidMatch(match)
+  }, [pwd, matchPwd])
+
+  useEffect(() =>{
+setErrMsg('');
+
+  },[user, pwd, matchPwd])
 
   return (
     <div
@@ -44,11 +66,30 @@ const SignUp = () => {
         position: 'relative', // Add position relative to the parent div
       }}
     >
+      
+      <div
+        style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.8)', // Slightly transparent background
+          padding: '20px',
+          borderRadius: '8px',
+        }}
+      >
     
     <div>
       <h2>Sign Up</h2>
       <form>
-        <label htmlFor="username">Username:</label>
+        <label htmlFor="username">username:
+        <span className={validName && user ? "valid" : "hide"}>
+  <FontAwesomeIcon icon={faCheck}/>
+</span>
+<span className={!validName && user ? "invalid" : "hide"}>
+  <FontAwesomeIcon icon={faTimes}/>
+</span>
+
+
+
+
+        </label>
         <input
           type="text"
           id="username"
@@ -56,9 +97,21 @@ const SignUp = () => {
           autoComplete="off"
           onChange={(e) => setUser(e.target.value)}
           required
+          // !aria-invalid used for screen reader accessibility
+          aria-invalid ={validName ? "false": "true"}
+          aria-describedby="uidnote"
+          onFocus={() => setUserFocus(true)}
+          onBlur = {() => setUserFocus(false)}
+
         />
+        <p id="uidnote" className={userFocus && user && !validName ? "instructions" : "offscreen"}>
+          <FontAwesomeIcon icon={faInfoCircle}/>
+          4 to 24 charavters.<br/>
+          Must begin with a letter.<br/>
+          Letters, numbers, underscores, hyphens allowed.
+        </p>
          <form>
-        <label htmlFor="username">Username:</label>
+        <label htmlFor="password">Password:</label>
         <input
           type="text"
           id="username"
@@ -69,7 +122,7 @@ const SignUp = () => {
         />
       </form>
       <form>
-        <label htmlFor="username">Username:</label>
+        <label htmlFor="">re-enter:</label>
         <input
           type="text"
           id="username"
@@ -80,6 +133,7 @@ const SignUp = () => {
         />
       </form>
       </form>
+    </div>
     </div>
     </div>
   );
