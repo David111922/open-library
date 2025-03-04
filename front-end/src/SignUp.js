@@ -29,7 +29,7 @@ const SignUp = () => {
       userRef.current.focus();
     }
   }, []);
-// !useEffect to test REGEX function for user
+// !!useEffect to test REGEX function for user
   useEffect(() => {
 const result = USER_REGEX.test(user);
 console.log(result);
@@ -74,22 +74,30 @@ setErrMsg('');
           borderRadius: '8px',
         }}
       >
-    
-    <div>
+   
+    <section>
+      <p ref={errRef} className={errMsg ? "errmsg" : 
+      "offscreen"} aria-live="assertive">{errMsg}</p>
       <h2>Sign Up</h2>
       <form>
-        <label htmlFor="username">username:
-        <span className={validName && user ? "valid" : "hide"}>
+        <label htmlFor="username">Username:
+          {/* latest change to add colors to fdontAwesome icons */}
+        <span style={{ color: validName ? "green" : "red", marginLeft: "5px" }}>
+  <FontAwesomeIcon icon={validName ? faCheck : faTimes} />
+</span>
+
+
+        <span className={validName ? "valid" : "hide"}>
   <FontAwesomeIcon icon={faCheck}/>
 </span>
-<span className={!validName && user ? "invalid" : "hide"}>
+<span className={validName || !user ? "hide" :
+  "invalid"
+}>
   <FontAwesomeIcon icon={faTimes}/>
 </span>
+</label>
 
 
-
-
-        </label>
         <input
           type="text"
           id="username"
@@ -98,18 +106,26 @@ setErrMsg('');
           onChange={(e) => setUser(e.target.value)}
           required
           // !aria-invalid used for screen reader accessibility
-          aria-invalid ={validName ? "false": "true"}
+          aria-invalid ={validName ? "false" : "true"}
           aria-describedby="uidnote"
           onFocus={() => setUserFocus(true)}
           onBlur = {() => setUserFocus(false)}
 
         />
-        <p id="uidnote" className={userFocus && user && !validName ? "instructions" : "offscreen"}>
+{/* problem with fontAwesome icons and info showing up before text input */}
+<p id="uidnote" className={userFocus && user && !validName ? "instructions" : "hide"}>
           <FontAwesomeIcon icon={faInfoCircle}/>
-          4 to 24 charavters.<br/>
+          4 to 24 characters.<br/>
           Must begin with a letter.<br/>
           Letters, numbers, underscores, hyphens allowed.
         </p>
+
+
+
+
+
+        
+    
          <form>
         <label htmlFor="password">Password:</label>
         <input
@@ -133,7 +149,7 @@ setErrMsg('');
         />
       </form>
       </form>
-    </div>
+    </section>
     </div>
     </div>
   );
