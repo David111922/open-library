@@ -18,7 +18,7 @@ const Login = () => {
   const handleSearchBooks = () => {
     navigate('/searchBooks'); // Update this path as necessary for your route
   };
-  // ! to handle redict to sign up page when button clicked
+  // ! to handle redirect to sign up page when button clicked
   const handleSignUp = () => {
 navigate('./SignUp');
 
